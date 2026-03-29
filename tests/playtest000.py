@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright
 
 def test_has_title():
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(headless=True)
         context = browser.new_context()
         page = context.new_page()
         page.goto("https://playwright.dev/")
@@ -14,7 +14,7 @@ def test_has_title():
 
 def test_get_started_link():
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(headless=True)
         context = browser.new_context()
         page = context.new_page()
         page.goto("https://playwright.dev/")

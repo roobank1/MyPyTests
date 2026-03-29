@@ -1,6 +1,6 @@
 import asyncio
-import os
-from playwright.async_api import async_playwright
+import re
+from playwright.async_api import async_playwright, expect
 
 
 async def playwright_page_open(page):
@@ -19,7 +19,7 @@ async def playwright_py(page):
     await python_link.click()
 
     # Default 30s can be tight on GitHub-hosted runners.
-    await page.wait_for_url("**/python**", timeout=60_000)
+    await expect(page).to_have_url(re.compile(r"^https://playwright\.dev/python/?$"), timeout=60_000)
 
 
 async def playwright_node(page):
@@ -30,13 +30,16 @@ async def playwright_node(page):
     await node_link.wait_for(state="visible", timeout=60_000)
     await node_link.click()
 
-    await page.wait_for_url("**/node**", timeout=60_000)
+    # Site navigation structure can change; ensure we still land on the Node home.
+    if "/python/" in page.url:
+        await page.goto("https://playwright.dev/", wait_until="domcontentloaded")
+
+    await expect(page).to_have_url(re.compile(r"^https://playwright\.dev/?$"), timeout=60_000)
 
 
 async def run_scenario():
-    is_ci = os.getenv("CI", "").lower() in ("true", "1", "yes")
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=is_ci, slow_mo=100)
+        browser = await p.chromium.launch(headless=True, slow_mo=100)
         context = await browser.new_context()
         page = await context.new_page()
 

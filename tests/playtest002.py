@@ -1,5 +1,4 @@
 import asyncio
-import os
 from playwright.async_api import async_playwright
 
 async def playwright_page_open(page):
@@ -20,8 +19,7 @@ async def playwright_node(page):
 
 async def run_scenario():
     async with async_playwright() as p:
-        headless = bool(os.getenv("CI"))
-        browser = await p.chromium.launch(headless=headless, slow_mo=100)
+        browser = await p.chromium.launch(headless=True, slow_mo=100)
         context = await browser.new_context()
         page = await context.new_page()
 
