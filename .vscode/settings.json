@@ -4,6 +4,11 @@
             "path": "PAT-Task-6/Employee-Management/main.py",
             "envManager": "ms-python.python:venv",
             "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "venvlen82kd",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
         }
     ]
 }
