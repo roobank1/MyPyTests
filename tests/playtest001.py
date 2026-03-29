@@ -30,10 +30,11 @@ async def playwright_node(page):
     await node_link.wait_for(state="visible", timeout=60_000)
     await node_link.click()
 
-    # The language switcher may be overridden by a session cookie; navigate
-    # directly to ensure we land on the Node.js docs regardless.
-    await page.goto("https://playwright.dev/docs/intro", wait_until="domcontentloaded")
-    await expect(page).to_have_url(re.compile(r"playwright\.dev/docs/"), timeout=60_000)
+    # Site navigation structure can change; ensure we still land on the Node home.
+    if "/python/" in page.url:
+        await page.goto("https://playwright.dev/", wait_until="domcontentloaded")
+
+    await expect(page).to_have_url(re.compile(r"^https://playwright\.dev/?$"), timeout=60_000)
 
 
 async def run_scenario():
