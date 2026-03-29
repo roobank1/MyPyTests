@@ -1,48 +1,56 @@
 import asyncio
 import os
+import re
 from playwright.async_api import async_playwright
 
 
-async def playwright_page_open(page):
+async def playwright_page_open(page, timeout_ms: int):
     # Be explicit about load waiting for CI stability.
-    await page.goto("https://playwright.dev", wait_until="domcontentloaded")
-    await page.wait_for_load_state("networkidle")
+    await page.goto("https://playwright.dev", wait_until="domcontentloaded", timeout=timeout_ms)
+    await page.wait_for_load_state("networkidle", timeout=timeout_ms)
 
 
-async def playwright_py(page):
+async def playwright_py(page, timeout_ms: int):
     # Ensure the UI is ready before interacting.
-    await page.get_by_role("button", name="Node.js").wait_for(state="visible", timeout=60_000)
+    await page.get_by_role("button", name="Node.js").wait_for(state="visible", timeout=timeout_ms)
     await page.get_by_role("button", name="Node.js").click()
 
     python_link = page.get_by_label("Main").get_by_role("link", name="Python")
-    await python_link.wait_for(state="visible", timeout=60_000)
-    await python_link.click()
+    await python_link.wait_for(state="visible", timeout=timeout_ms)
 
-    # Default 30s can be tight on GitHub-hosted runners.
-    await page.wait_for_url("**/python**", timeout=60_000)
+    async with page.expect_url(re.compile(r".*/python(?:/.*)?$"), timeout=timeout_ms):
+        await python_link.click()
+
+    await page.get_by_role("heading", name=re.compile(r"Python", re.I)).wait_for(timeout=timeout_ms)
 
 
-async def playwright_node(page):
-    await page.get_by_role("button", name="Python").wait_for(state="visible", timeout=60_000)
+async def playwright_node(page, timeout_ms: int):
+    await page.get_by_role("button", name="Python").wait_for(state="visible", timeout=timeout_ms)
     await page.get_by_role("button", name="Python").click()
 
     node_link = page.get_by_label("Main").get_by_role("link", name="Node.js")
-    await node_link.wait_for(state="visible", timeout=60_000)
-    await node_link.click()
+    await node_link.wait_for(state="visible", timeout=timeout_ms)
 
-    await page.wait_for_url("**/node**", timeout=60_000)
+    async with page.expect_url(re.compile(r".*/(?:node|nodejs)(?:/.*)?$"), timeout=timeout_ms):
+        await node_link.click()
+
+    await page.get_by_role("heading", name=re.compile(r"Node\.js", re.I)).wait_for(timeout=timeout_ms)
 
 
 async def run_scenario():
     is_ci = os.getenv("CI", "").lower() in ("true", "1", "yes")
+    timeout_ms = 90_000 if is_ci else 60_000
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=is_ci, slow_mo=100)
+        browser = await p.chromium.launch(
+            headless=True if is_ci else False,
+            slow_mo=0 if is_ci else 100,
+        )
         context = await browser.new_context()
         page = await context.new_page()
 
-        await playwright_page_open(page)
-        await playwright_py(page)
-        await playwright_node(page)
+        await playwright_page_open(page, timeout_ms)
+        await playwright_py(page, timeout_ms)
+        await playwright_node(page, timeout_ms)
 
         await browser.close()
 
