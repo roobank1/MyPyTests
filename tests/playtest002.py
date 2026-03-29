@@ -17,7 +17,7 @@ async def playwright_node(page):
     await page.wait_for_timeout(1000)
 
 
-async def test():
+async def run_scenario():
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False, slow_mo=100)
         context = await browser.new_context()
@@ -30,4 +30,5 @@ async def test():
         await browser.close()
 
 
-asyncio.run(test())
+def test_playwright_navigation():
+    asyncio.run(run_scenario())
