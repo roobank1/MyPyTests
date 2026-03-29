@@ -19,6 +19,6 @@ def pytest_sessionfinish(session, exitstatus):
 
     report_path = Path(md_path).resolve()
 
-    _safe_write_line(config, f"Markdown report: {report_path}")
+    _safe_write_line(config, f"Text report: {report_path}")
     _safe_write_line(config, f"View locally (PowerShell): code \"{report_path}\"")
-    _safe_write_line(config, "View on GitHub: push test-results/report.md and open it in the repo")
+    _safe_write_line(config, "View on GitHub: push test-results/report.txt and open it in the repo")
