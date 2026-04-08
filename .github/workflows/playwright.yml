@@ -4,6 +4,9 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
 jobs:
   test:
     timeout-minutes: 60
@@ -27,9 +30,15 @@ jobs:
       run: python -m pytest
       env:
         CI: "true"
-    - uses: actions/upload-artifact@v4
+    - name: Upload HTML report and test outputs
+      uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: test-results
-        path: test-results/
+        name: pytest-html-report-${{ github.run_id }}
+        path: |
+          playwright-report.html
+          report.html
+          test-results/
+          playwright-report/
+        if-no-files-found: warn
         retention-days: 30

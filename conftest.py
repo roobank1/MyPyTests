@@ -1,24 +1,31 @@
 from __future__ import annotations
 
-from pathlib import Path
-import os
+import pytest
+
+from utils.steps import build_steps_html
 
 
-def _safe_write_line(config, message: str) -> None:
-    terminal_reporter = config.pluginmanager.get_plugin("terminalreporter")
-    if terminal_reporter is not None:
-        terminal_reporter.write_line(message)
+# =========================
+# 📊 Attach to HTML report
+# =========================
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item):
+    outcome = yield
+    rep = outcome.get_result()
 
+    if rep.when == "call":
+        try:
+            import pytest_html
+            extra = list(getattr(rep, "extra", []))
+            steps = getattr(item, "step_results", [])
 
-def pytest_sessionfinish(session, exitstatus):
-    config = session.config
-    md_path = getattr(config.option, "md_report_output", None)
+            if steps:
+                extra.append(
+                    pytest_html.extras.html(build_steps_html(steps))
+                )
 
-    if not md_path:
-        return
+            rep.extra = extra
+            rep.extras = extra
 
-    report_path = Path(md_path).resolve()
-
-    _safe_write_line(config, f"Text report: {report_path}")
-    _safe_write_line(config, f"View locally (PowerShell): code \"{report_path}\"")
-    _safe_write_line(config, "View on GitHub: push test-results/report.txt and open it in the repo")
+        except ImportError:
+            pass
