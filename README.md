@@ -7,7 +7,7 @@
 👉 **View latest test execution report here:**
 🔗 https://roobank1.github.io/MyPyTests/playwright-report.html
 
-* ⏱ Runs automatically every **1 hour**
+* ⏱ Runs automatically every **3 hours**
 * 📸 Includes screenshots for each test step
 * ❌ Captures failure state for debugging
 * 📊 Displays pass/fail status with detailed logs
@@ -29,7 +29,7 @@
 * Tests run:
 
   * On every push to `main`
-  * Every **1 hour** via scheduled workflow
+  * Every **3 hours** via scheduled workflow
 * Generates HTML report
 * Publishes report to GitHub Pages
 
