@@ -6,16 +6,16 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/roobank1/MyPyTests.git"
+    "url": "git+https://github.com/roobank1/PlayPyTest.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/roobank1/MyPyTests/issues"
+    "url": "https://github.com/roobank1/PlayPyTest/issues"
   },
-  "homepage": "https://github.com/roobank1/MyPyTests#readme",
+  "homepage": "https://github.com/roobank1/PlayPyTest#readme",
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0"

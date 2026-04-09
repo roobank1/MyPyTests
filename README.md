@@ -1,11 +1,11 @@
-![CI](https://github.com/roobank1/MyPyTests/actions/workflows/playwright.yml/badge.svg)
+![CI](https://github.com/roobank1/PlayPyTest/actions/workflows/playwright.yml/badge.svg)
 
 # 🚀 Playwright Python Automation Framework
 
 ## 📊 Live Test Report
 
 👉 **View latest test execution report here:**
-🔗 https://roobank1.github.io/MyPyTests/playwright-report.html
+🔗 https://roobank1.github.io/PlayPyTests/playwright-report.html
 
 * ⏱ Runs automatically every **3 hours**
 * 📸 Includes screenshots for each test step
