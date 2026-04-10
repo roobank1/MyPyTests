@@ -25,7 +25,6 @@ def pytest_runtest_makereport(item):
                 )
 
             rep.extra = extra
-            rep.extras = extra
 
         except ImportError:
             pass

@@ -11,17 +11,17 @@ async def playwright_py(page, request):
     async def action():
         await page.get_by_role("button", name="Node.js").click()
         await page.get_by_label("Main").get_by_role("link", name="Python").click()
+        assert "python" in page.url.lower(), "URL should contain 'python'"
         await page.wait_for_timeout(1000)
     await async_step(page, "Switch documentation to Python", action, request)
 
-
 async def playwright_node(page, request):
     async def action():
-        await page.get_by_role("button", name="Python").click()
+        await page.get_by_role("button", name="Node.js").click()
         await page.get_by_label("Main").get_by_role("link", name="Node.js").click()
+        assert "node" in page.url.lower(), "URL should contain 'node'"
         await page.wait_for_timeout(1000)
-    await async_step(page, "Switch documentation back to Node.js", action, request)
-    
+    await async_step(page, "Switch documentation to Node.js", action, request)    
     
 async def playwright_api(page, request):
     async def action():

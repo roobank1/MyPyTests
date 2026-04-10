@@ -1,4 +1,6 @@
 ![CI](https://github.com/roobank1/PlayPyTest/actions/workflows/playwright.yml/badge.svg)
+![Pytest](https://img.shields.io/badge/tested%20with-pytest-green)
+![Playwright](https://img.shields.io/badge/tested%20with-Playwright-45ba4b)
 
 # 🚀 Playwright Python Automation Framework
 
