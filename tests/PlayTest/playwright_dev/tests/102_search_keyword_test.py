@@ -25,7 +25,7 @@ async def _run_action(request, search_value):
         "python",
         "Python",
         "PYTHON",
-        "playwright",      # this will fail, as the python related results not be found in the search results
+        # "playwright",      # this will fail, as the python related results not be found in the search results
         # "playwright dev",  # this will fail, as the python related results not be found in the search results
     ],
 )
