@@ -1,20 +1,33 @@
 
 from asyncio import run
 from playwright.async_api import async_playwright
-from tests.PlayTest.playwright_dev.pages.index_page import (
-    playwright_page_open,
-    playwright_search,
-)
+import pytest
 
-# Scenario runner for test
-async def run_scenario(request):
+from tests.PlayTest.playwright_dev.pages.index_page import IndexPage
+
+
+# Generic scenario runner that opens the page then runs an action coroutine
+async def _run_action(request, search_value):
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True, slow_mo=100)
+        browser = await p.chromium.launch(headless=True)
         context = await browser.new_context()
         page = await context.new_page()
-        await playwright_page_open(page, request)
-        await playwright_search(page, request, search_value="python")
+        index = IndexPage(page, request)
+        await index.open()
+        await index.search_and_open_repo(search_value=search_value)
+        # await action_coro(page, request)
         await browser.close()
 
-def test_playwright_navigation(request):
-    run(run_scenario(request))
+
+@pytest.mark.parametrize(
+    "search_value",
+    [
+        "python",
+        "Python",
+        "PYTHON",
+        "playwright",      # this will fail, as the python related results not be found in the search results
+        # "playwright dev",  # this will fail, as the python related results not be found in the search results
+    ],
+)
+def test_search_variations(request, search_value):
+    run(_run_action(request, search_value))
