@@ -7,7 +7,7 @@
 ## 📊 Live Test Report
 
 👉 **View latest test execution report here:**
-🔗 https://roobank1.github.io/PlayPyTests/playwright-report.html
+🔗 https://roobank1.github.io/PlayPyTest/playwright-report.html
 
 * ⏱ Runs automatically every **3 hours**
 * 📸 Includes screenshots for each test step
